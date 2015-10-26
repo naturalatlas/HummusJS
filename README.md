@@ -1,5 +1,5 @@
 # HummusJS
-[![NPM version](http://img.shields.io/npm/v/hummus.svg?style=flat)](https://www.npmjs.org/package/hummus)
+[![NPM version](http://img.shields.io/npm/v/@naturalatlas/hummus.svg?style=flat)](https://www.npmjs.org/package/@naturalatlas/hummus)
 [![Build Status](https://travis-ci.org/naturalatlas/HummusJS.svg)](https://travis-ci.org/naturalatlas/HummusJS)
 
 **([naturalatlas](https://github.com/naturalatlas) fork with prebuilt binaries available)**
