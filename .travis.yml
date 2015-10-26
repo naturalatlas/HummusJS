@@ -1,10 +1,15 @@
 language: cpp
-sudo: false
 compiler:
 - gcc
 os:
 - linux
 - osx
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
 env:
   matrix:
   - NODE_NVM_VERSION="0.10"
