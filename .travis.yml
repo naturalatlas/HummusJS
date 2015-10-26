@@ -1,9 +1,41 @@
-language: node_js
+language: cpp
 sudo: false
-node_js:
-  - "4.2"
-  - "4.0"
-  - "0.12"
-  - "0.10"
+compiler:
+- gcc
+os:
+- linux
+- osx
+env:
+  matrix:
+  - NODE_NVM_VERSION="0.10"
+  - NODE_NVM_VERSION="0.12"
+  - NODE_NVM_VERSION="4.0"
+  - NODE_NVM_VERSION="4.2"
+  global:
+  - secure: Qd8o9fX1+wzP04htoiZvU0E/rc7ADoJxvmFuz/A2ojnYXDeqMFRy7JxonwQt8ffxybOOVbb3aAjbQp5M2zilsQkOlp+UUVF1dCISIBzdxHZRf8zjyoMcQka1VIbqyNTUTRvQaNjIZRtDa0n8S9vFMo4rqaKN9AzUfCmwUJVRukFu38oP4V5F2ByPxPswjtJ5qGIPWc0b9UoV0jUcqZZ1E2mIKw7TiniBecqP8D32drTByRr8Of2pnygS/RLqBTZcfO/9puxhBYeo6of6Wk7niFgZHnPujAr/lT9ACsYUN2HQFhfdRe0hC0Nzn6qZ9BmgdnqrsJbDEvqDKhkqlcsRi2BMCVklOFEym0dKAob7w7lrKIfOJusXxKv8H0F1GHSmP8JaleJHmotYdQFkzS9Z83SNR8uYjbPp0xofvNt5gPvnE/TBilQSa1v75V+tOsGRbU/e2dUtF/KB9RINIumHTUni9N/2uQgCeEL5FkK5ovGFNUsZ8f1q4REJAqBgeYQo9xPkeSgqnzXMFSz4L8wZzPU4TegEuxOCoaR50HHY6cFJGRu85BusebmHDt06SU5yXBdWbbKDeIEJF+Jkb9hTsY+XX1oKGAw9b9dVIUm9C4aPxVTbd8Z3hZqlYf0ZHzOlpfcvE0L+RtwXKjeCySEMa7HCKFr54VPQMN/5EaP2r20=
+  - secure: LgJfKP83zIS7ZoHc8X9xLyYubeMqq5eDXcXN9DW1E5q8LcUxesowpHDE/VPXN8ycerwgp86Y3P9dftscp2NyTE8BjQRNEwbIIOE8qfUyDn3LWDmWkfuPI5PgNbpbEGGr7+gX1glF+gklyf+12SLw2bXG5VJH+DCDi1iNV67phgmrxaoWKy2zBGExs/W8NQPMjGAgOn8LCrDaHwCZgKolFj+uXXlSTqiPdvj46g1n+YDrlfcn9MIc20+Xb+J6LV/a7zrVQZz6WSJEg4jL/7UAkvRG8zDUqB5c4S3ZkqHQUvWLMYbBe1q3jA2myAM/X4wWwdb4hU8s9jZQpPfw2//SmZwzYr3it2yMnXofSH/brZLAfjSqakV80u3ZFO1LNJjI0lpFUG+PFvm/d0K51xLfm1TgGp59pI3m2Rhax06TbAynqit5XUGdd10tPNCsDPAkO/VUJ8TMAvdei2Z7H6YIvrW3NsS22H/ZaCgBLPvMbAmPrmwJwPJ4JgBOa3QnHPFMEwMkQq/eCcp1Mlfma/p7bTMbORw4CSbOn3l84xFUn/8ZCprxBTHBpj7X8SY6C3kWWj5eSP3Uoep2TdAVr0Z4kxPFRff8vVWhG7emkM3ZZcPlwwF3d/qMw14VyygnFHnO5aHW8xejMuvCtHz06ETZ6HGk+ooZ0stz6kYyyJUPtwo=
+matrix:
+  allow_failures:
+  - env: NODE_NVM_VERSION="4.0"
+  - env: NODE_NVM_VERSION="4.2"
+before_install:
+- if [[ $TRAVIS_OS_NAME == "linux" ]]; then export CXX=g++-4.8; fi
+- COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
+- PUBLISH_BINARY=false
+- if test "${COMMIT_MESSAGE#*'[publish binary]'}" != "$COMMIT_MESSAGE" && test "${TRAVIS_BRANCH}"
+  == "master" && test "${TRAVIS_PULL_REQUEST}" == "false"; then PUBLISH_BINARY=true;
+  fi;
+- git clone https://github.com/creationix/nvm.git ../.nvm && source ../.nvm/nvm.sh
+- nvm install $NODE_NVM_VERSION
+- nvm use $NODE_NVM_VERSION
+- node --version
+- npm --version
+- $CXX --version
+install:
+- npm install --build-from-source
 script:
-  - npm test
+- ./node_modules/.bin/node-pre-gyp package testpackage
+- npm test
+- if [[ "${PUBLISH_BINARY}" == "true" ]]; then ./node_modules/.bin/node-pre-gyp unpublish
+  publish; rm -rf {build,lib/binding}; ./node_modules/.bin/node-pre-gyp install; npm
+  test; fi

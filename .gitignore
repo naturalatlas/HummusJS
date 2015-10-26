@@ -2,6 +2,7 @@ hummusjs
 build
 .DS_Store
 tests/output
+binding
 node_modules
 
 #all the binaries

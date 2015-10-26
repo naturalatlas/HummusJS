@@ -1,18 +1,28 @@
 {
-  "name": "hummus",
-  "version": "1.0.43",
-  "description": "Create, read and modify PDF files and streams",
+  "name": "@naturalatlas/hummus",
+  "version": "1.0.44",
+  "description": "Fork of hummus w/prebuilt binaries",
   "homepage": "http://pdfhummus.com/",
   "license": "Apache-2.0",
   "author": "Gal Kahana <gal.kahana@hotmail.com>",
   "main": "./hummus.js",
   "scripts": {
-    "install": "node-gyp rebuild",
+    "install": "node-pre-gyp install --fallback-to-build",
     "test": "mocha -R tap ./tests/*.js"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/galkahana/HummusJS.git"
+  },
+  "binary": {
+    "module_name": "hummus",
+    "module_path": "./binding",
+    "remote_path": "./{module_name}/v{version}/{toolset}/",
+    "host": "https://naturalatlas-node-binary.s3.amazonaws.com",
+    "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "keywords": [
     "pdf",
@@ -24,7 +34,14 @@
     "binding.gyp"
   ],
   "devDependencies": {
+    "aws-sdk": "^2.2.11",
     "chai": "^3.4.0",
     "mocha": "^2.3.3"
-  }
+  },
+  "dependencies": {
+    "node-pre-gyp": "^0.6.13"
+  },
+  "bundledDependencies": [
+    "node-pre-gyp"
+  ]
 }
