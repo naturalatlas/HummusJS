@@ -7,7 +7,7 @@ ifeq ($(strip $(version)),)
 else
 	npm test
 	npm version $(version) -m "Released %s [publish binary]"
-	npm publish --access public
+	npm publish --access public --registry https://registry.npmjs.org/
 	git push origin master
 	git push origin --tags
 endif

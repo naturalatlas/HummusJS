@@ -33,6 +33,7 @@ before_install:
 - git clone https://github.com/creationix/nvm.git ../.nvm && source ../.nvm/nvm.sh
 - nvm install $NODE_NVM_VERSION
 - nvm use $NODE_NVM_VERSION
+- echo $PUBLISH_BINARY
 - node --version
 - npm --version
 - $CXX --version
@@ -42,5 +43,5 @@ script:
 - ./node_modules/.bin/node-pre-gyp package testpackage
 - npm test
 - if [[ "${PUBLISH_BINARY}" == "true" ]]; then ./node_modules/.bin/node-pre-gyp unpublish
-  publish; rm -rf {build,lib/binding}; ./node_modules/.bin/node-pre-gyp install; npm
+  publish; rm -rf {build,binding}; ./node_modules/.bin/node-pre-gyp install; npm
   test; fi

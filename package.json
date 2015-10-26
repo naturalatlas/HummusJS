@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/galkahana/HummusJS.git"
+    "url": "git://github.com/naturalatlas/HummusJS.git"
   },
   "binary": {
     "module_name": "hummus",
     "module_path": "./binding",
     "remote_path": "./{module_name}/v{version}/{toolset}/",
-    "host": "https://naturalatlas-node-binary.s3.amazonaws.com",
+    "host": "https://naturalatlas-node-binary.s3-us-west-2.amazonaws.com",
     "package_name": "{node_abi}-{platform}-{arch}.tar.gz"
   },
   "publishConfig": {
